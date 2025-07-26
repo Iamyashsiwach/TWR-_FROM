@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR/VR in the Workplace Survey</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .custom-radio input[type="radio"] {
+            display: none;
+        }
+        .custom-radio label {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            border: 1px solid #4a5568;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        .custom-radio label:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: #a0aec0;
+        }
+        .custom-radio input[type="radio"]:checked + label {
+            background: linear-gradient(to right, #4f46e5, #c026d3);
+            border-color: #8b5cf6;
+            color: white;
+            font-weight: 600;
+        }
+        .modal-backdrop {
+            transition: opacity 0.3s ease;
+        }
+        .loader {
+            border-top-color: #3498db;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+    <div class="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/50 to-slate-900 flex items-center justify-center p-4">
+        <div class="w-full max-w-3xl mx-auto bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-700/50 p-6 md:p-10">
+            
+            <!-- Form Header -->
+            <div class="text-center mb-10">
+                <h1 class="text-4xl md:text-5xl font-bold text-white bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-fuchsia-500 pb-2">
+                    The Future of Work
+                </h1>
+                <p class="text-lg text-gray-400 mt-2">An AR/VR Perspective Survey</p>
+            </div>
+
+            <!-- Form -->
+            <form id="surveyForm">
+                <div class="space-y-12">
+                    
+                    <!-- User Details -->
+                    <div>
+                        <h2 class="text-xl font-semibold text-white mb-4">Your Details</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="userName" class="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
+                                <input type="text" id="userName" name="userName" required class="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                            </div>
+                             <div>
+                                <label for="userIdDisplay" class="block text-sm font-medium text-gray-300 mb-2">Your Main ID</label>
+                                <input type="text" id="userIdDisplay" readonly class="w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-2 text-gray-400 cursor-not-allowed" value="Initializing...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 1: Role -->
+                    <div>
+                        <h2 class="text-xl font-semibold text-white mb-4">1. What is your current role or background?</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 custom-radio">
+                            <div><input type="radio" id="role-student" name="role" value="student"><label for="role-student">Student</label></div>
+                            <div><input type="radio" id="role-professional" name="role" value="professional"><label for="role-professional">Working Professional</label></div>
+                            <div><input type="radio" id="role-academic" name="role" value="academic"><label for="role-academic">Academic/Researcher</label></div>
+                            <div><input type="radio" id="role-other" name="role" value="other"><label for="role-other">Other</label></div>
+                        </div>
+                    </div>
+
+                    <!-- Question 2: Gender -->
+                    <div>
+                        <h2 class="text-xl font-semibold text-white mb-4">2. What is your gender?</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 custom-radio">
+                            <div><input type="radio" id="gender-male" name="gender" value="male"><label for="gender-male">Male</label></div>
+                            <div><input type="radio" id="gender-female" name="gender" value="female"><label for="gender-female">Female</label></div>
+                            <div><input type="radio" id="gender-nonbinary" name="gender" value="nonbinary"><label for="gender-nonbinary">Non-binary</label></div>
+                            <div><input type="radio" id="gender-prefer-not-to-say" name="gender" value="prefer-not-to-say"><label for="gender-prefer-not-to-say">Prefer not to say</label></div>
+                        </div>
+                    </div>
+
+                    <!-- Question 3: Industry -->
+                    <div>
+                        <h2 class="text-xl font-semibold text-white mb-4">3. Which industry are you in or interested in?</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 custom-radio">
+                            <div><input type="radio" id="industry-it" name="industry" value="it"><label for="industry-it">IT/Software Development</label></div>
+                            <div><input type="radio" id="industry-healthcare" name="industry" value="healthcare"><label for="industry-healthcare">Healthcare</label></div>
+                            <div><input type="radio" id="industry-education" name="industry" value="education"><label for="industry-education">Education</label></div>
+                            <div><input type="radio" id="industry-manufacturing" name="industry" value="manufacturing"><label for="industry-manufacturing">Manufacturing</label></div>
+                            <div><input type="radio" id="industry-media" name="industry" value="media"><label for="industry-media">Entertainment/Media</label></div>
+                            <div><input type="radio" id="industry-other" name="industry" value="other"><label for="industry-other">Other</label></div>
+                        </div>
+                    </div>
+
+                    <!-- Question 4: AR/VR Experience -->
+                    <div>
+                        <h2 class="text-xl font-semibold text-white mb-4">4. Have you used AR or VR before?</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 custom-radio">
+                            <div><input type="radio" id="exp-both" name="experience" value="both"><label for="exp-both">Yes, both</label></div>
+                            <div><input type="radio" id="exp-ar" name="experience" value="ar"><label for="exp-ar">Only AR</label></div>
+                            <div><input type="radio" id="exp-vr" name="experience" value="vr"><label for="exp-vr">Only VR</label></div>
+                            <div><input type="radio" id="exp-none" name="experience" value="none"><label for="exp-none">No, never</label></div>
+                        </div>
+                    </div>
+
+                    <!-- Question 5: Familiarity -->
+                    <div>
+                        <h2 class="text-xl font-semibold text-white mb-4">5. How familiar are you with AR/VR in the workplace?</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 custom-radio">
+                            <div><input type="radio" id="fam-very" name="familiarity" value="very"><label for="fam-very">Very familiar</label></div>
+                            <div><input type="radio" id="fam-somewhat" name="familiarity" value="somewhat"><label for="fam-somewhat">Somewhat familiar</label></div>
+                            <div><input type="radio" id="fam-heard" name="familiarity" value="heard"><label for="fam-heard">Heard of it, but not sure</label></div>
+                            <div><input type="radio" id="fam-not" name="familiarity" value="not"><label for="fam-not">Not familiar at all</label></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 6: Benefit Area -->
+                    <div>
+                        <h2 class="text-xl font-semibold text-white mb-4">6. Which area is most likely to benefit from AR/VR?</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 custom-radio">
+                            <div><input type="radio" id="benefit-collab" name="benefit" value="collab"><label for="benefit-collab">Remote Collaboration</label></div>
+                            <div><input type="radio" id="benefit-training" name="benefit" value="training"><label for="benefit-training">Training & Skill Development</label></div>
+                            <div><input type="radio" id="benefit-cx" name="benefit" value="cx"><label for="benefit-cx">Customer Experience & Sales</label></div>
+                            <div><input type="radio" id="benefit-design" name="benefit" value="design"><label for="benefit-design">Product Design & Prototyping</label></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 7: Training Improvement -->
+                    <div>
+                        <h2 class="text-xl font-semibold text-white mb-4">7. Can AR/VR significantly improve employee training?</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 custom-radio">
+                            <div><input type="radio" id="training-sa" name="training_improve" value="sa"><label for="training-sa">Strongly Agree</label></div>
+                            <div><input type="radio" id="training-a" name="training_improve" value="a"><label for="training-a">Agree</label></div>
+                            <div><input type="radio" id="training-n" name="training_improve" value="n"><label for="training-n">Neutral</label></div>
+                            <div><input type="radio" id="training-d" name="training_improve" value="d"><label for="training-d">Disagree</label></div>
+                        </div>
+                    </div>
+
+                    <!-- Question 8: Barriers to Adoption -->
+                    <div>
+                        <h2 class="text-xl font-semibold text-white mb-4">8. What is the biggest barrier to AR/VR adoption?</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 custom-radio">
+                            <div><input type="radio" id="barrier-cost" name="barrier" value="cost"><label for="barrier-cost">High cost of implementation</label></div>
+                            <div><input type="radio" id="barrier-expertise" name="barrier" value="expertise"><label for="barrier-expertise">Lack of technical expertise</label></div>
+                            <div><input type="radio" id="barrier-resistance" name="barrier" value="resistance"><label for="barrier-resistance">Resistance to change</label></div>
+                            <div><input type="radio" id="barrier-privacy" name="barrier" value="privacy"><label for="barrier-privacy">Privacy/security concerns</label></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 9: Interest in AR/VR workplace -->
+                    <div>
+                        <h2 class="text-xl font-semibold text-white mb-4">9. Would you work in a company that uses AR/VR daily?</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 custom-radio">
+                            <div><input type="radio" id="interest-yes" name="interest" value="yes"><label for="interest-yes">Definitely Yes</label></div>
+                            <div><input type="radio" id="interest-maybe" name="interest" value="maybe"><label for="interest-maybe">Maybe</label></div>
+                            <div><input type="radio" id="interest-no" name="interest" value="no"><label for="interest-no">Not interested</label></div>
+                            <div><input type="radio" id="interest-notsure" name="interest" value="notsure"><label for="interest-notsure">Not sure</label></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 10: Replacement of Physical Workplaces -->
+                    <div>
+                        <h2 class="text-xl font-semibold text-white mb-4">10. Can AR/VR eventually replace physical workplaces?</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 custom-radio">
+                            <div><input type="radio" id="replace-yes-many" name="replace" value="yes-many"><label for="replace-yes-many">Yes, for many industries</label></div>
+                            <div><input type="radio" id="replace-yes-specific" name="replace" value="yes-specific"><label for="replace-yes-specific">Yes, but only for specific roles</label></div>
+                            <div><input type="radio" id="replace-partially" name="replace" value="partially"><label for="replace-partially">Partially, it will augment them</label></div>
+                            <div><input type="radio" id="replace-no" name="replace" value="no"><label for="replace-no">No, physical interaction is key</label></div>
+                        </div>
+                    </div>
+
+                    <!-- Question 11: Most Impactful Innovations -->
+                    <div>
+                        <h2 class="text-xl font-semibold text-white mb-4">11. What future AR/VR innovation will be most impactful?</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 custom-radio">
+                            <div><input type="radio" id="innovate-avatars" name="innovation" value="avatars"><label for="innovate-avatars">Realistic virtual avatars</label></div>
+                            <div><input type="radio" id="innovate-haptics" name="innovation" value="haptics"><label for="innovate-haptics">Haptic feedback (sense of touch)</label></div>
+                            <div><input type="radio" id="innovate-headsets" name="innovation" value="headsets"><label for="innovate-headsets">Lighter, affordable headsets</label></div>
+                            <div><input type="radio" id="innovate-ai" name="innovation" value="ai"><label for="innovate-ai">AI-powered virtual assistants</label></div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-6 text-center">
+                        <button type="submit" id="submitBtn" class="w-full md:w-auto px-12 py-4 text-lg font-bold text-white bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg shadow-lg hover:scale-105 hover:shadow-xl transform transition-all duration-300 flex items-center justify-center mx-auto disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span id="submitBtnText">Submit Survey</span>
+                            <div id="submitLoader" class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-6 w-6 ml-3 hidden"></div>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Thank You Modal -->
+    <div id="thankYouModal" class="fixed inset-0 bg-black bg-opacity-70 modal-backdrop flex items-center justify-center p-4 opacity-0 pointer-events-none">
+        <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 text-center max-w-sm transform scale-95 transition-transform duration-300">
+            <h2 id="modalTitle" class="text-3xl font-bold text-white mb-4">Thank You!</h2>
+            <p id="modalMessage" class="text-gray-300 mb-6">Your responses have been recorded. Your input is valuable for our research.</p>
+            <button id="closeModalBtn" class="px-6 py-2 font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors">Close</button>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- Firebase Configuration ---
+        // These variables are provided by the environment.
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // --- Initialize Firebase ---
+        let app, db, auth;
+        let currentUserId = null;
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            setLogLevel('debug'); // For detailed console logs
+        } catch (e) {
+            console.error("Firebase initialization failed:", e);
+            document.getElementById('modalTitle').innerText = 'Error';
+            document.getElementById('modalMessage').innerText = 'Could not connect to the database. Please try again later.';
+            showModal();
+        }
+
+        // --- DOM Elements ---
+        const form = document.getElementById('surveyForm');
+        const modal = document.getElementById('thankYouModal');
+        const modalContent = modal.querySelector('div');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const userIdDisplay = document.getElementById('userIdDisplay');
+        const submitBtn = document.getElementById('submitBtn');
+        const submitBtnText = document.getElementById('submitBtnText');
+        const submitLoader = document.getElementById('submitLoader');
+
+        // --- Authentication ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // User is signed in.
+                currentUserId = user.uid;
+                userIdDisplay.value = currentUserId;
+                console.log("User authenticated with ID:", currentUserId);
+            } else {
+                // User is signed out. Attempt to sign in.
+                console.log("No user found, attempting to sign in...");
+                try {
+                    if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                } catch (error) {
+                    console.error("Authentication failed:", error);
+                    userIdDisplay.value = "Authentication Failed";
+                }
+            }
+        });
+
+        // --- Form Submission ---
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            if (!currentUserId) {
+                showModal('Error', 'Could not verify user. Please refresh and try again.');
+                return;
+            }
+            
+            // Show loading state
+            setLoading(true);
+
+            // Collect form data
+            const formData = new FormData(form);
+            const surveyData = {};
+            for (let [key, value] of formData.entries()) {
+                surveyData[key] = value;
+            }
+            
+            // Add metadata
+            surveyData.userId = currentUserId;
+            surveyData.createdAt = serverTimestamp();
+
+            try {
+                // Define the collection path
+                const collectionPath = `artifacts/${appId}/public/data/survey_responses`;
+                const surveyCollection = collection(db, collectionPath);
+                
+                // Add a new document with a generated ID
+                const docRef = await addDoc(surveyCollection, surveyData);
+                console.log("Document written with ID: ", docRef.id);
+                
+                // Show success message
+                showModal('Thank You!', 'Your responses have been recorded successfully.');
+                form.reset(); // Clear the form
+                userIdDisplay.value = currentUserId; // Keep user ID displayed
+
+            } catch (e) {
+                console.error("Error adding document: ", e);
+                showModal('Submission Failed', 'There was an error saving your response. Please try again.');
+            } finally {
+                // Hide loading state
+                setLoading(false);
+            }
+        });
+        
+        // --- UI Helper Functions ---
+        function setLoading(isLoading) {
+            if (isLoading) {
+                submitBtn.disabled = true;
+                submitBtnText.classList.add('hidden');
+                submitLoader.classList.remove('hidden');
+            } else {
+                submitBtn.disabled = false;
+                submitBtnText.classList.remove('hidden');
+                submitLoader.classList.add('hidden');
+            }
+        }
+
+        function showModal(title = 'Thank You!', message = 'Your response has been recorded.') {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalMessage').innerText = message;
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => modalContent.classList.remove('scale-95'), 50);
+        }
+
+        function closeModal() {
+            modalContent.classList.add('scale-95');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('pointer-events-none');
+            }, 300);
+        }
+
+        closeModalBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) closeModal();
+        });
+    </script>
+</body>
+</html>
